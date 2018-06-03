@@ -1,5 +1,5 @@
-export default function createStore(reducer) {
-  let state = {};
+export function createStore(reducer) {
+  let state;
   let listeners = [];
 
   const getState = () => state;
@@ -24,3 +24,13 @@ export default function createStore(reducer) {
     dispatch
   };
 }
+
+export function combineReducers(reducers) {
+  return (state = {}, action) => Object.keys(reducers).reduce((newState, key) => {
+    const reducer = reducers[key];
+    const subState = state[key];
+    newState[key] = reducer(subState, action);
+    return newState;
+  }, {});
+}
+
